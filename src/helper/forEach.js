@@ -1,3 +1,10 @@
+/**
+ * Fallback for Array.indexOf for IE8 et al
+ *
+ * @param {Array} arr
+ * @param {Function} callback
+ * @param {Object} thisArg
+ */
 module.exports = function (arr, callback, thisArg) {
   if (Array.prototype.forEach ) {
     return arr.forEach(callback, thisArg);

@@ -1,5 +1,10 @@
+
 /**
  * Fallback for Array.indexOf for IE8 et al
+ *
+ * @param {Array} arr
+ * @param searchElement
+ * @returns {Number}
  */
 module.exports = function (arr, searchElement /*, fromIndex */ ) {
   if (Array.prototype.hasOwnProperty("indexOf")) {
@@ -23,7 +28,6 @@ module.exports = function (arr, searchElement /*, fromIndex */ ) {
     }
   }
   if (n >= len) {
-    // console.log("indexOf not found1 ", JSON.stringify(searchElement), JSON.stringify(arr));
     return -1;
   }
   var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
@@ -35,7 +39,6 @@ module.exports = function (arr, searchElement /*, fromIndex */ ) {
   if (arr == searchElement) {
     return 0;
   }
-  // console.log("indexOf not found2 ", JSON.stringify(searchElement), JSON.stringify(arr));
 
   return -1;
 };

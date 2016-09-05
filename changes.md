@@ -18,3 +18,8 @@
 
 # Remove
 - `Twig.lib`
+
+## Object.assign
+add check `Object.assign` for:
+- `helper/megre`
+- `helper/extend`

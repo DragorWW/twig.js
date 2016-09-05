@@ -1,4 +1,10 @@
-// shallow-copy an object
+/**
+ *  shallow-copy an object
+ *
+ * @param {Object} src
+ *
+ * @returns {Object}
+ */
 module.exports = function(src) {
   if (Object.assign) {
     return Object.assign({}, src);

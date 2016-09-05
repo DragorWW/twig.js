@@ -1,5 +1,11 @@
 var is = require('../helper/is');
-// chunk an array (arr) into arrays of (size) items, returns an array of arrays, or an empty array on invalid input
+//
+/**
+ * chunk an array (arr) into arrays of (size) items, returns an array of arrays, or an empty array on invalid input
+ * @param {Array} arr
+ * @param {Number} size
+ * @returns {Array}
+ */
 module.exports = function (arr, size) {
   var returnVal = [],
     x = 0,
@@ -14,4 +20,4 @@ module.exports = function (arr, size) {
   }
 
   return returnVal;
-}
+};

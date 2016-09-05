@@ -1,3 +1,9 @@
+/**
+ *
+ * @param {Object} src
+ * @param {Object}add
+ * @returns {Object}
+ */
 module.exports = function (src, add) {
   if (Object.assign) {
     return Object.assign(src,add);
