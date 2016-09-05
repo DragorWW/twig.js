@@ -1,3 +1,5 @@
+var is = require('../helper/is');
+
 module.exports = function(items, params) {
   var size = params.shift(),
     fill = params.shift(),
@@ -5,11 +7,11 @@ module.exports = function(items, params) {
     last,
     missing;
 
-  if (!Twig.lib.is("Array", items)) {
+  if (!is("Array", items)) {
     throw new Twig.Error("batch filter expects items to be an array");
   }
 
-  if (!Twig.lib.is("Number", size)) {
+  if (!is("Number", size)) {
     throw new Twig.Error("batch filter expects size to be a number");
   }
 

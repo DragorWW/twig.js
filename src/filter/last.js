@@ -1,5 +1,7 @@
+var is = require('../helper/is');
+
 module.exports = function(value) {
-  if (Twig.lib.is('Object', value)) {
+  if (is('Object', value)) {
     var keys;
 
     if (value._keys === undefined) {

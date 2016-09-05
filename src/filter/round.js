@@ -1,3 +1,5 @@
+var is = require('../helper/is');
+
 module.exports = function(value, params) {
   params = params || [];
 
@@ -6,7 +8,7 @@ module.exports = function(value, params) {
 
   value = parseFloat(value);
 
-  if(precision && !Twig.lib.is("Number", precision)) {
+  if(precision && !is("Number", precision)) {
     throw new Twig.Error("round filter expects precision to be a number");
   }
 
@@ -14,7 +16,7 @@ module.exports = function(value, params) {
     return Twig.lib.round(value, precision);
   }
 
-  if(!Twig.lib.is("Function", Math[method])) {
+  if(!is("Function", Math[method])) {
     throw new Twig.Error("round filter expects method to be 'floor', 'ceil', or 'common'");
   }
 

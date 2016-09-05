@@ -21,10 +21,7 @@ module.exports = function(Twig) {
     Twig.lib.date = require('locutus/php/datetime/date');
     Twig.lib.boolval = require('locutus/php/var/boolval');
 
-    Twig.lib.is = function(type, obj) {
-        var clas = Object.prototype.toString.call(obj).slice(8, -1);
-        return obj !== undefined && obj !== null && clas === type;
-    };
+    Twig.lib.is = require('./helper/is');
 
     // shallow-copy an object
     Twig.lib.copy = function(src) {

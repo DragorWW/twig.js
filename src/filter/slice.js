@@ -1,3 +1,5 @@
+var is = require('../helper/is');
+
 module.exports = function(value, params) {
   if (value === undefined || value === null) {
     return;
@@ -13,13 +15,13 @@ module.exports = function(value, params) {
   // handle negative start values
   var startIndex = start >= 0 ? start : Math.max( value.length + start, 0 );
 
-  if (Twig.lib.is("Array", value)) {
+  if (is("Array", value)) {
     var output = [];
     for (var i = startIndex; i < startIndex + length && i < value.length; i++) {
       output.push(value[i]);
     }
     return output;
-  } else if (Twig.lib.is("String", value)) {
+  } else if (is("String", value)) {
     return value.substr(startIndex, length);
   } else {
     throw new Twig.Error("slice filter expects value to be an array or string");

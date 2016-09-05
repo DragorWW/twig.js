@@ -1,3 +1,5 @@
+var is = require('../helper/is');
+
 module.exports = function(value, params) {
   if (value === undefined || value === null) {
     return;
@@ -5,7 +7,7 @@ module.exports = function(value, params) {
   if (params === undefined || params.length < 1 || params.length > 2) {
     throw new Twig.Error("split filter expects 1 or 2 argument");
   }
-  if (Twig.lib.is("String", value)) {
+  if (is("String", value)) {
     var delimiter = params[0],
       limit = params[1],
       split = value.split(delimiter);

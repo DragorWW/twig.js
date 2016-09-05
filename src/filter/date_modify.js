@@ -1,3 +1,5 @@
+var is = require('../helper/is');
+
 module.exports = function(value, params) {
   if (value === undefined || value === null) {
     return;
@@ -8,13 +10,13 @@ module.exports = function(value, params) {
 
   var modifyText = params[0], time;
 
-  if (Twig.lib.is("Date", value)) {
+  if (is("Date", value)) {
     time = Twig.lib.strtotime(modifyText, value.getTime() / 1000);
   }
-  if (Twig.lib.is("String", value)) {
+  if (is("String", value)) {
     time = Twig.lib.strtotime(modifyText, Twig.lib.strtotime(value));
   }
-  if (Twig.lib.is("Number", value)) {
+  if (is("Number", value)) {
     time = Twig.lib.strtotime(modifyText, value);
   }
 
