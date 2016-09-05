@@ -1,9 +1,15 @@
 // shallow-copy an object
 module.exports = function(src) {
-  var target = {},
-    key;
-  for (key in src)
-    target[key] = src[key];
+  if (Object.assign) {
+    return Object.assign({}, src);
+  } else {
+    var target = {},
+      key;
+    for (key in src) {
+      target[ key ] = src[ key ];
+    }
 
-  return target;
+    return target;
+  }
+
 };
