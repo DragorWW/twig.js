@@ -24,48 +24,14 @@ module.exports = function(Twig) {
     Twig.lib.is = require('./helper/is');
 
     // shallow-copy an object
-    Twig.lib.copy = function(src) {
-        var target = {},
-            key;
-        for (key in src)
-            target[key] = src[key];
+    Twig.lib.copy = require('./helper/copy');
 
-        return target;
-    };
+    Twig.lib.extend = require('./helper/extend');
 
-    Twig.lib.extend = function (src, add) {
-        var keys = Object.keys(add),
-            i;
-
-        i = keys.length;
-
-        while (i--) {
-            src[keys[i]] = add[keys[i]];
-        }
-
-        return src;
-    };
-
-    Twig.lib.replaceAll = function(string, search, replace) {
-        return string.split(search).join(replace);
-    };
+    Twig.lib.replaceAll = require('./helper/replaceAll');
 
     // chunk an array (arr) into arrays of (size) items, returns an array of arrays, or an empty array on invalid input
-    Twig.lib.chunkArray = function (arr, size) {
-        var returnVal = [],
-            x = 0,
-            len = arr.length;
-
-        if (size < 1 || !Twig.lib.is("Array", arr)) {
-            return [];
-        }
-
-        while (x < len) {
-            returnVal.push(arr.slice(x, x += size));
-        }
-
-        return returnVal;
-    };
+    Twig.lib.chunkArray = require('./helper/chunkArray');
 
     return Twig;
 };

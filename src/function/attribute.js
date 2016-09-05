@@ -1,4 +1,5 @@
 var is = require('../helper/is');
+
 module.exports = function(object, method, params) {
   if (is('Object', object)) {
     if (object.hasOwnProperty(method)) {
