@@ -11,7 +11,7 @@ module.exports = function (Twig) {
     /**
      * Create and compile a twig.js template.
      *
-     * @param {Object} param Paramteres for creating a Twig template.
+     * @params {Object} param Paramteres for creating a Twig template.
      *
      * @return {Twig.Template} A Twig template ready for rendering.
      */
