@@ -6,7 +6,6 @@
 - `Twig.lib.copy` -> `require('./helper/copy')`
 - `Twig.lib.extend` -> `require('./helper/extend')`
 - `Twig.lib.replaceAll` -> `require('./helper/replaceAll')`
-
 - `Twig.lib.sprintf` -> `require('locutus/php/strings/sprintf')`
 - `Twig.lib.vsprintf` -> `require('locutus/php/strings/vsprintf')`
 - `Twig.lib.round` -> `require('locutus/php/math/round')`
