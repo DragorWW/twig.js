@@ -1,6 +1,11 @@
 // ## twig.core.js
 //
 // This file handles template level tokenizing, compiling and parsing.
+
+
+var indexOf = require('./helper/indexOf');
+var forEach = require('./helper/forEach');
+
 module.exports = function (Twig) {
     "use strict";
 
@@ -14,14 +19,6 @@ module.exports = function (Twig) {
         parent: "{{|PARENT|}}"
     };
 
-    /**
-     * Fallback for Array.indexOf for IE8 et al
-     */
-    Twig.indexOf = require('./helper/indexOf');
-
-    Twig.forEach = require('./helper/forEach');
-
-    Twig.merge = require('./helper/merge');
 
     /**
      * Exception thrown by twig.js.
@@ -448,7 +445,7 @@ module.exports = function (Twig) {
                     prev_token = stack.pop();
                     prev_template = Twig.logic.handler[prev_token.type];
 
-                    if (Twig.indexOf(prev_template.next, type) < 0) {
+                    if (indexOf(prev_template.next, type) < 0) {
                         throw new Error(type + " not expected after a " + prev_token.type);
                     }
 
@@ -635,7 +632,7 @@ module.exports = function (Twig) {
                 chain = true,
                 that = this;
 
-            Twig.forEach(tokens, function parseToken(token) {
+            forEach(tokens, function parseToken(token) {
                 Twig.log.debug("Twig.parse: ", "Parsing token: ", token);
 
                 switch (token.type) {
@@ -731,7 +728,7 @@ module.exports = function (Twig) {
 
         // [].map would be better but it's not supported by IE8-
         var escaped_output = [];
-        Twig.forEach(output, function (str) {
+        forEach(output, function (str) {
             if (str && (str.twig_markup !== true && str.twig_markup != strategy)) {
                 str = Twig.filters.escape(str, [ strategy ]);
             }
@@ -1164,7 +1161,7 @@ module.exports = function (Twig) {
         sub_template.render(context);
 
         // Mixin blocks
-        Twig.forEach(Object.keys(sub_template.blocks), function(key) {
+        forEach(Object.keys(sub_template.blocks), function(key) {
             if (override || that.blocks[key] === undefined) {
                 that.blocks[key] = sub_template.blocks[key];
                 that.importedBlocks.push(key);

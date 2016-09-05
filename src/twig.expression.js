@@ -1,6 +1,10 @@
 // ## twig.expression.js
 //
 // This file handles tokenizing, compiling and parsing expressions.
+
+var indexOf = require('./helper/indexOf');
+var forEach = require('./helper/forEach');
+
 module.exports = function (Twig) {
     "use strict";
 
@@ -472,7 +476,7 @@ module.exports = function (Twig) {
             validate: function(match, tokens) {
                 var last_token = tokens[tokens.length - 1];
                 // We can't use the regex to test if we follow a space because expression is trimmed
-                return last_token && (Twig.indexOf(Twig.expression.reservedWords, last_token.value.trim()) < 0);
+                return last_token && (indexOf(Twig.expression.reservedWords, last_token.value.trim()) < 0);
             },
             compile: Twig.expression.fn.compile.push_both,
             parse: Twig.expression.fn.parse.push
@@ -748,7 +752,7 @@ module.exports = function (Twig) {
             next: Twig.expression.type.parameter.start,
             validate: function(match, tokens) {
                 // Make sure this function is not a reserved word
-                return match[1] && (Twig.indexOf(Twig.expression.reservedWords, match[1]) < 0);
+                return match[1] && (indexOf(Twig.expression.reservedWords, match[1]) < 0);
             },
             transform: function(match, tokens) {
                 return '(';
@@ -799,7 +803,7 @@ module.exports = function (Twig) {
                     Twig.expression.type.parameter.start]),
             compile: Twig.expression.fn.compile.push,
             validate: function(match, tokens) {
-                return (Twig.indexOf(Twig.expression.reservedWords, match[0]) < 0);
+                return (indexOf(Twig.expression.reservedWords, match[0]) < 0);
             },
             parse: function(token, stack, context) {
                 // Get the variable from the context
@@ -1048,7 +1052,7 @@ module.exports = function (Twig) {
             Twig.log.trace("Twig.expression.tokenize",
                            "Matched a ", type, " regular expression of ", match);
 
-            if (next && Twig.indexOf(next, type) < 0) {
+            if (next && indexOf(next, type) < 0) {
                 invalid_matches.push(
                     type + " cannot follow a " + tokens[tokens.length - 1].type +
                            " at template:" + exp_offset + " near '" + match[0].substring(0, 20) +
@@ -1196,7 +1200,7 @@ module.exports = function (Twig) {
             token_template = null,
             loop_token_fixups = [];
 
-        Twig.forEach(tokens, function (token, index) {
+        forEach(tokens, function (token, index) {
             //If the token is marked for cleanup, we don't need to parse it
             if (token.cleanup) {
                 return;
@@ -1219,7 +1223,7 @@ module.exports = function (Twig) {
 
         //Check every fixup and remove "key" as long as they still have "params". This covers the use case where
         //a ":" operator is used in a loop with a "(expression):" statement. We need to be able to evaluate the expression
-        Twig.forEach(loop_token_fixups, function (loop_token_fixup) {
+        forEach(loop_token_fixups, function (loop_token_fixup) {
             if (loop_token_fixup.params && loop_token_fixup.key) {
                 delete loop_token_fixup["key"];
             }

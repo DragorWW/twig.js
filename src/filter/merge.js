@@ -1,3 +1,5 @@
+var forEach = require('../helper/forEach');
+
 module.exports = function(value, params) {
   var obj = [],
     arr_index = 0,
@@ -8,7 +10,7 @@ module.exports = function(value, params) {
     // Create obj as an Object
     obj = { };
   } else {
-    Twig.forEach(params, function(param) {
+    forEach(params, function(param) {
       if (!is("Array", param)) {
         obj = { };
       }
@@ -19,14 +21,14 @@ module.exports = function(value, params) {
   }
 
   if (is("Array", value)) {
-    Twig.forEach(value, function(val) {
+    forEach(value, function(val) {
       if (obj._keys) obj._keys.push(arr_index);
       obj[arr_index] = val;
       arr_index++;
     });
   } else {
     keyset = value._keys || Object.keys(value);
-    Twig.forEach(keyset, function(key) {
+    forEach(keyset, function(key) {
       obj[key] = value[key];
       obj._keys.push(key);
 
@@ -45,16 +47,16 @@ module.exports = function(value, params) {
   }
 
   // mixin the merge arrays
-  Twig.forEach(params, function(param) {
+  forEach(params, function(param) {
     if (is("Array", param)) {
-      Twig.forEach(param, function(val) {
+      forEach(param, function(val) {
         if (obj._keys) obj._keys.push(arr_index);
         obj[arr_index] = val;
         arr_index++;
       });
     } else {
       keyset = param._keys || Object.keys(param);
-      Twig.forEach(keyset, function(key) {
+      forEach(keyset, function(key) {
         if (!obj[key]) obj._keys.push(key);
         obj[key] = param[key];
 

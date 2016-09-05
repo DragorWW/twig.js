@@ -1,3 +1,5 @@
+var forEach = require('../helper/forEach');
+
 module.exports = function(value, params) {
   if (value === undefined || value === null){
     return;
@@ -14,7 +16,7 @@ module.exports = function(value, params) {
     output = value;
   } else {
     keyset = value._keys || Object.keys(value);
-    Twig.forEach(keyset, function(key) {
+    forEach(keyset, function(key) {
       if (key === "_keys") return; // Ignore the _keys property
       if (value.hasOwnProperty(key)) {
         output.push(value[key]);

@@ -1,3 +1,5 @@
+var forEach = require('../helper/forEach');
+
 module.exports = function() {
   var EOL = '\n',
     indentChar = '  ',
@@ -58,7 +60,7 @@ module.exports = function() {
   // handle no argument case by dumping the entire render context
   if (args.length == 0) args.push(this.context);
 
-  Twig.forEach(args, function(variable) {
+  forEach(args, function(variable) {
     dumpVar(variable);
   });
 

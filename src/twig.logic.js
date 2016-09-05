@@ -1,6 +1,11 @@
 // ## twig.logic.js
 //
 // This file handles tokenizing, compiling and parsing logic tokens. {% ... %}
+
+var indexOf = require('./helper/indexOf');
+var forEach = require('./helper/forEach');
+var merge = require('./helper/merge');
+
 module.exports = function (Twig) {
     "use strict";
 
@@ -285,13 +290,13 @@ module.exports = function (Twig) {
 
                         // Merge in values that exist in context but have changed
                         // in inner_context.
-                        Twig.merge(context, inner_context, true);
+                        merge(context, inner_context, true);
                     };
 
 
                 if (Twig.lib.is('Array', result)) {
                     len = result.length;
-                    Twig.forEach(result, function (value) {
+                    forEach(result, function (value) {
                         var key = index;
 
                         loop(key, value);
@@ -303,7 +308,7 @@ module.exports = function (Twig) {
                         keyset = Object.keys(result);
                     }
                     len = keyset.length;
-                    Twig.forEach(keyset, function(key) {
+                    forEach(keyset, function(key) {
                         // Ignore the _keys property, it's internal to twig.js
                         if (key === "_keys") return;
 
@@ -490,8 +495,8 @@ module.exports = function (Twig) {
             parse: function (token, context, chain) {
                 var block_output,
                     output,
-                    isImported = Twig.indexOf(this.importedBlocks, token.block) > -1,
-                    hasParent = this.blocks[token.block] && Twig.indexOf(this.blocks[token.block], Twig.placeholders.parent) > -1;
+                    isImported = indexOf(this.importedBlocks, token.block) > -1,
+                    hasParent = this.blocks[token.block] && indexOf(this.blocks[token.block], Twig.placeholders.parent) > -1;
 
                 // Don't override previous blocks unless they're imported with "use"
                 // Loops should be exempted as well.
