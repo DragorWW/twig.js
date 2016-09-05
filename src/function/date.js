@@ -1,4 +1,5 @@
 var is = require('../helper/is');
+var strtotime = require('locutus/php/datetime/strtotime');
 
 module.exports = function(date, time) {
   var dateObj;
@@ -11,7 +12,7 @@ module.exports = function(date, time) {
       dateObj = new Date(date * 1000);
     }
     else {
-      dateObj = new Date(Twig.lib.strtotime(date) * 1000);
+      dateObj = new Date(strtotime(date) * 1000);
     }
   } else if (is("Number", date)) {
     // timestamp

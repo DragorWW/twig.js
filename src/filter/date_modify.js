@@ -1,4 +1,5 @@
 var is = require('../helper/is');
+var strtotime = require('locutus/php/datetime/strtotime');
 
 module.exports = function(value, params) {
   if (value === undefined || value === null) {
@@ -11,13 +12,13 @@ module.exports = function(value, params) {
   var modifyText = params[0], time;
 
   if (is("Date", value)) {
-    time = Twig.lib.strtotime(modifyText, value.getTime() / 1000);
+    time = strtotime(modifyText, value.getTime() / 1000);
   }
   if (is("String", value)) {
-    time = Twig.lib.strtotime(modifyText, Twig.lib.strtotime(value));
+    time = strtotime(modifyText, strtotime(value));
   }
   if (is("Number", value)) {
-    time = Twig.lib.strtotime(modifyText, value);
+    time = strtotime(modifyText, value);
   }
 
   return new Date(time * 1000);

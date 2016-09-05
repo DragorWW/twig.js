@@ -7,7 +7,8 @@ var forEach = require('./helper/forEach');
 var merge = require('./helper/merge');
 var is = require('./helper/is');
 var copy = require('./helper/copy');
-var extend = require('./helper/extend')
+var extend = require('./helper/extend');
+var boolval = require('locutus/php/var/boolval');
 
 module.exports = function (Twig) {
     "use strict";
@@ -103,7 +104,7 @@ module.exports = function (Twig) {
                 // Start a new logic chain
                 chain = true;
 
-                if (Twig.lib.boolval(result)) {
+                if (boolval(result)) {
                     chain = false;
                     // parse if output
                     output = Twig.parse.apply(this, [token.output, context]);
@@ -142,7 +143,7 @@ module.exports = function (Twig) {
                 var output = '',
                     result = Twig.expression.parse.apply(this, [token.stack, context]);
 
-                if (chain && Twig.lib.boolval(result)) {
+                if (chain && boolval(result)) {
                     chain = false;
                     // parse if output
                     output = Twig.parse.apply(this, [token.output, context]);

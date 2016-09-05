@@ -15,7 +15,6 @@ require('./twig.compiler')(Twig);
 require('./twig.expression')(Twig);
 require('./twig.filters')(Twig);
 require('./twig.functions')(Twig);
-require('./twig.lib')(Twig);
 require('./twig.loader.ajax')(Twig);
 require('./twig.loader.fs')(Twig);
 require('./twig.logic')(Twig);

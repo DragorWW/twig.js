@@ -1,6 +1,8 @@
 // ## twig.expression.operator.js
 //
 // This file handles operator lookups and parsing.
+var boolval = require('locutus/php/var/boolval');
+
 module.exports = function (Twig) {
     "use strict";
 
@@ -141,7 +143,7 @@ module.exports = function (Twig) {
                 break;
 
             case '?:':
-                if (Twig.lib.boolval(a)) {
+                if (boolval(a)) {
                     stack.push(a);
                 } else {
                     stack.push(b);
@@ -155,7 +157,7 @@ module.exports = function (Twig) {
                     c = undefined;
                 }
 
-                if (Twig.lib.boolval(a)) {
+                if (boolval(a)) {
                     stack.push(b);
                 } else {
                     stack.push(c);
@@ -205,7 +207,7 @@ module.exports = function (Twig) {
 
             case 'not':
             case '!':
-                stack.push(!Twig.lib.boolval(b));
+                stack.push(!boolval(b));
                 break;
 
             case '<':

@@ -1,3 +1,5 @@
+var sprintf = require('locutus/php/strings/sprintf');
+
 module.exports = function(value, params) {
   if (value === undefined|| value === null){
     return;
@@ -27,7 +29,7 @@ module.exports = function(value, params) {
         if(char_code < 0x80)
           result += "\\x" + char_code.toString(16).toUpperCase();
         else
-          result += Twig.lib.sprintf("\\u%04s", char_code.toString(16).toUpperCase());
+          result += sprintf("\\u%04s", char_code.toString(16).toUpperCase());
       }
     }
 
@@ -69,9 +71,9 @@ module.exports = function(value, params) {
         if(char_code <= 0x1f && char_code != 0x09 && char_code != 0x0a && char_code != 0x0d)
           result += "&#xFFFD;";
         else if(char_code < 0x80)
-          result += Twig.lib.sprintf("&#x%02s;", char_code.toString(16).toUpperCase());
+          result += sprintf("&#x%02s;", char_code.toString(16).toUpperCase());
         else
-          result += Twig.lib.sprintf("&#x%04s;", char_code.toString(16).toUpperCase());
+          result += sprintf("&#x%04s;", char_code.toString(16).toUpperCase());
       }
     }
 

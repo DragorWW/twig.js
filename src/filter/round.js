@@ -1,4 +1,5 @@
 var is = require('../helper/is');
+var round = require('locutus/php/math/round');
 
 module.exports = function(value, params) {
   params = params || [];
@@ -13,7 +14,7 @@ module.exports = function(value, params) {
   }
 
   if (method === "common") {
-    return Twig.lib.round(value, precision);
+    return round(value, precision);
   }
 
   if(!is("Function", Math[method])) {

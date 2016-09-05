@@ -1,10 +1,11 @@
 var is = require('../helper/is');
+var max = require('locutus/php/math/max');
 
 module.exports = function(values) {
   if(is("Object", values)) {
     delete values["_keys"];
-    return Twig.lib.max(values);
+    return max(values);
   }
 
-  return Twig.lib.max.apply(null, arguments);
+  return max.apply(null, arguments);
 }
