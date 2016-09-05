@@ -1,6 +1,9 @@
 // ## twig.tests.js
 //
 // This file handles expression tests. (is empty, is not defined, etc...)
+
+var is = require('./helper/is');
+
 module.exports = function (Twig) {
     "use strict";
     Twig.tests = {
@@ -38,7 +41,7 @@ module.exports = function (Twig) {
             return value === params[0];
         },
         iterable: function(value) {
-            return value && (Twig.lib.is("Array", value) || Twig.lib.is("Object", value));
+            return value && (is("Array", value) || is("Object", value));
         }
         /*
         constant ?

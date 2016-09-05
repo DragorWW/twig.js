@@ -1,3 +1,5 @@
+var replaceAll = require('../helper/replaceAll');
+
 module.exports = function(value) {
   if (value === undefined || value === null){
     return;
@@ -10,7 +12,7 @@ module.exports = function(value) {
     .replace(/\r/g, br)
     .replace(/\n/g, br);
 
-  value = Twig.lib.replaceAll(value, linebreak_tag, "\n");
+  value = replaceAll(value, linebreak_tag, "\n");
 
   return Twig.Markup(value);
 }

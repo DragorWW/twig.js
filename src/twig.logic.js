@@ -5,6 +5,9 @@
 var indexOf = require('./helper/indexOf');
 var forEach = require('./helper/forEach');
 var merge = require('./helper/merge');
+var is = require('./helper/is');
+var copy = require('./helper/copy');
+var extend = require('./helper/extend')
 
 module.exports = function (Twig) {
     "use strict";
@@ -294,14 +297,14 @@ module.exports = function (Twig) {
                     };
 
 
-                if (Twig.lib.is('Array', result)) {
+                if (is('Array', result)) {
                     len = result.length;
                     forEach(result, function (value) {
                         var key = index;
 
                         loop(key, value);
                     });
-                } else if (Twig.lib.is('Object', result)) {
+                } else if (is('Object', result)) {
                     if (result._keys !== undefined) {
                         keyset = result._keys;
                     } else {
@@ -370,7 +373,7 @@ module.exports = function (Twig) {
                         Otherwise we have a context with infinite recursion.
                         Fixes #341
                      */
-                    value = Twig.lib.copy(value);
+                    value = copy(value);
                 }
 
                 context[key] = value;
@@ -624,7 +627,7 @@ module.exports = function (Twig) {
                 template.render(innerContext);
 
                 // Extend the parent context with the extended context
-                Twig.lib.extend(context, innerContext);
+                extend(context, innerContext);
 
                 return {
                     chain: chain,

@@ -1,4 +1,5 @@
 var is = require('../helper/is');
+var chunkArray = require('../helper/chunkArray');
 
 module.exports = function(items, params) {
   var size = params.shift(),
@@ -17,7 +18,7 @@ module.exports = function(items, params) {
 
   size = Math.ceil(size);
 
-  result = Twig.lib.chunkArray(items, size);
+  result = chunkArray(items, size);
 
   if (fill && items.length % size != 0) {
     last = result.pop();

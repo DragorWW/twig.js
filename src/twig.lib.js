@@ -21,17 +21,5 @@ module.exports = function(Twig) {
     Twig.lib.date = require('locutus/php/datetime/date');
     Twig.lib.boolval = require('locutus/php/var/boolval');
 
-    Twig.lib.is = require('./helper/is');
-
-    // shallow-copy an object
-    Twig.lib.copy = require('./helper/copy');
-
-    Twig.lib.extend = require('./helper/extend');
-
-    Twig.lib.replaceAll = require('./helper/replaceAll');
-
-    // chunk an array (arr) into arrays of (size) items, returns an array of arrays, or an empty array on invalid input
-    Twig.lib.chunkArray = require('./helper/chunkArray');
-
     return Twig;
 };

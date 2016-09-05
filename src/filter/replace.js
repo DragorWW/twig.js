@@ -1,3 +1,5 @@
+var replaceAll = require('../helper/replaceAll');
+
 module.exports = function(value, params) {
   if (value === undefined||value === null){
     return;
@@ -7,7 +9,7 @@ module.exports = function(value, params) {
     tag;
   for (tag in pairs) {
     if (pairs.hasOwnProperty(tag) && tag !== "_keys") {
-      value = Twig.lib.replaceAll(value, tag, pairs[tag]);
+      value = replaceAll(value, tag, pairs[tag]);
     }
   }
   return value;
