@@ -1,7 +1,7 @@
-module.exports = function(value) {
-  if ( typeof value !== "string" ) {
-    return value;
-  }
+module.exports = function (value) {
+    if (typeof value !== "string") {
+        return value;
+    }
 
-  return value.toUpperCase();
+    return value.toUpperCase();
 }

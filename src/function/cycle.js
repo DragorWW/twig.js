@@ -1,4 +1,4 @@
-module.exports = function(arr, i) {
-  var pos = i % arr.length;
-  return arr[pos];
+module.exports = function (arr, i) {
+    var pos = i % arr.length;
+    return arr[ pos ];
 }

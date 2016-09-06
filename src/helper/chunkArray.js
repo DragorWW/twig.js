@@ -7,17 +7,17 @@ var is = require('../helper/is');
  * @returns {Array}
  */
 module.exports = function (arr, size) {
-  var returnVal = [],
-    x = 0,
-    len = arr.length;
+    var returnVal = [],
+        x = 0,
+        len = arr.length;
 
-  if (size < 1 || !is("Array", arr)) {
-    return [];
-  }
+    if (size < 1 || !is("Array", arr)) {
+        return [];
+    }
 
-  while (x < len) {
-    returnVal.push(arr.slice(x, x += size));
-  }
+    while (x < len) {
+        returnVal.push(arr.slice(x, x += size));
+    }
 
-  return returnVal;
+    return returnVal;
 };

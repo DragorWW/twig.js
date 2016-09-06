@@ -7,14 +7,14 @@ var forEach = require('./forEach');
  * @param {Boolean} onlyChanged
  * @returns {Object}
  */
-module.exports = function(target, source, onlyChanged) {
-  forEach(Object.keys(source), function (key) {
-    if (onlyChanged && !(key in target)) {
-      return;
-    }
+module.exports = function (target, source, onlyChanged) {
+    forEach(Object.keys(source), function (key) {
+        if (onlyChanged && !(key in target)) {
+            return;
+        }
 
-    target[key] = source[key]
-  });
+        target[ key ] = source[ key ]
+    });
 
-  return target;
+    return target;
 }
