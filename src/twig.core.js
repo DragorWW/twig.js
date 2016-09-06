@@ -23,20 +23,7 @@ module.exports = function (Twig) {
     /**
      * Exception thrown by twig.js.
      */
-    Twig.Error = function(message) {
-       this.message = message;
-       this.name = "TwigException";
-       this.type = "TwigException";
-    };
-
-    /**
-     * Get the string representation of a Twig error.
-     */
-    Twig.Error.prototype.toString = function() {
-        var output = this.name + ": " + this.message;
-
-        return output;
-    };
+    Twig.Error = require('./model/Error')
 
     /**
      * Wrapper for logging to the console.
@@ -791,7 +778,7 @@ module.exports = function (Twig) {
      *        return template;
      *    });
      * });
-     * 
+     *
      * @param {String} method_name The method this loader is intended for (ajax, fs)
      * @param {Function} func The function to execute when loading the template
      * @param {Object|undefined} scope Optional scope parameter to bind func to
@@ -812,7 +799,7 @@ module.exports = function (Twig) {
 
     /**
      * Remove a registered loader
-     * 
+     *
      * @param {String} method_name The method name for the loader you wish to remove
      *
      * @return {void}
@@ -825,7 +812,7 @@ module.exports = function (Twig) {
 
     /**
      * See if a loader is registered by its method name
-     * 
+     *
      * @param {String} method_name The name of the loader you are looking for
      *
      * @return {boolean}
@@ -1153,8 +1140,7 @@ module.exports = function (Twig) {
     Twig.Template.prototype.importBlocks = function(file, override) {
         var sub_template = this.importFile(file),
             context = this.context,
-            that = this,
-            key;
+            that = this;
 
         override = override || false;
 

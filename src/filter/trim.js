@@ -3,7 +3,7 @@ module.exports = function(value, params) {
     return;
   }
 
-  var str = Twig.filters.escape( '' + value ),
+  var str = require('./escape')( '' + value ),
     whitespace;
   if ( params && params[0] ) {
     whitespace = '' + params[0];

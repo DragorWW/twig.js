@@ -1,6 +1,9 @@
 var forEach = require('../helper/forEach');
+var is = require('../helper/is');
 
-module.exports = function(value) {
+module.exports = json_encode;
+
+function json_encode (value) {
   if(value === undefined || value === null) {
     return "null";
   }
@@ -8,7 +11,7 @@ module.exports = function(value) {
     output = [];
 
     forEach(value, function(v) {
-      output.push(Twig.filters.json_encode(v));
+      output.push(json_encode(v));
     });
 
     return "[" + output.join(",") + "]";
@@ -18,7 +21,7 @@ module.exports = function(value) {
       output = [];
 
     forEach(keyset, function(key) {
-      output.push(JSON.stringify(key) + ":" + Twig.filters.json_encode(value[key]));
+      output.push(JSON.stringify(key) + ":" + json_encode(value[key]));
     });
 
     return "{" + output.join(",") + "}";
@@ -27,3 +30,4 @@ module.exports = function(value) {
     return JSON.stringify(value);
   }
 }
+

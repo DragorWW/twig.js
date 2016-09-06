@@ -3,12 +3,6 @@
 // This file handles parsing filters.
 module.exports = function (Twig) {
 
-    // Determine object type
-    function is(type, obj) {
-        var clas = Object.prototype.toString.call(obj).slice(8, -1);
-        return obj !== undefined && obj !== null && clas === type;
-    }
-
     Twig.filters = {
         // String Filters
         upper: require('./filter/upper'),

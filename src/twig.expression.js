@@ -426,8 +426,6 @@ module.exports = function (Twig) {
 
                 param_stack.unshift(token);
 
-                var is_expression = false;
-
                 //If the token at the top of the *stack* is a function token, pop it onto the output queue.
                 // Get the token preceding the parameters
                 stack_token = stack[stack.length-1];
@@ -454,9 +452,7 @@ module.exports = function (Twig) {
                 }
             },
             parse: function(token, stack, context) {
-                var new_array = [],
-                    array_ended = false,
-                    value = null;
+                var value = null;
 
                 if (token.expression) {
                     value = Twig.expression.parse.apply(this, [token.params, context]);
@@ -506,8 +502,6 @@ module.exports = function (Twig) {
                     token = output.pop();
                 }
                 param_stack.unshift(token);
-
-                var is_expression = false;
 
                 // Get the token preceding the parameters
                 token = output[output.length-1];
@@ -682,7 +676,6 @@ module.exports = function (Twig) {
                 var new_object = {},
                     object_ended = false,
                     token = null,
-                    token_key = null,
                     has_value = false,
                     value = null;
 
