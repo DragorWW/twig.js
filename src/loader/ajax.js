@@ -1,3 +1,6 @@
+var TwigError = require('../model/Error');
+var log = require('../helper/log');
+
 module.exports = function (location, params, callback, error_callback) {
     var template,
         xmlhttp,
@@ -5,7 +8,7 @@ module.exports = function (location, params, callback, error_callback) {
         parser = this.parsers[ params.parser ] || this.parser.twig;
 
     if (typeof XMLHttpRequest === "undefined") {
-        throw new Twig.Error('Unsupported platform: Unable to do ajax requests ' +
+        throw new TwigError('Unsupported platform: Unable to do ajax requests ' +
             'because there is no "XMLHTTPRequest" implementation');
     }
 
@@ -15,7 +18,7 @@ module.exports = function (location, params, callback, error_callback) {
 
         if (xmlhttp.readyState === 4) {
             if (xmlhttp.status === 200 || (window.cordova && xmlhttp.status == 0)) {
-                Twig.log.debug("Got template ", xmlhttp.responseText);
+                log.debug("Got template ", xmlhttp.responseText);
 
                 if (precompiled === true) {
                     data = JSON.parse(xmlhttp.responseText);

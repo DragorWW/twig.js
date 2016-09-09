@@ -1,5 +1,6 @@
 var is = require('../helper/is');
 var round = require('locutus/php/math/round');
+var TwigError = require('../model/Error');
 
 module.exports = function (value, params) {
     params = params || [];
@@ -10,7 +11,7 @@ module.exports = function (value, params) {
     value = parseFloat(value);
 
     if (precision && !is("Number", precision)) {
-        throw new Twig.Error("round filter expects precision to be a number");
+        throw new TwigError("round filter expects precision to be a number");
     }
 
     if (method === "common") {
@@ -18,7 +19,7 @@ module.exports = function (value, params) {
     }
 
     if (!is("Function", Math[ method ])) {
-        throw new Twig.Error("round filter expects method to be 'floor', 'ceil', or 'common'");
+        throw new TwigError("round filter expects method to be 'floor', 'ceil', or 'common'");
     }
 
     return Math[ method ](value * Math.pow(10, precision)) / Math.pow(10, precision);

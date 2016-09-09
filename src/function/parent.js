@@ -1,4 +1,6 @@
+var constants = require('../constants');
+
 module.exports = function () {
     // Add a placeholder
-    return Twig.placeholders.parent;
-}
+    return constants.placeholders.parent;
+};

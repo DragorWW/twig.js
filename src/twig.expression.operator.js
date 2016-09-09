@@ -2,6 +2,8 @@
 //
 // This file handles operator lookups and parsing.
 var boolval = require('locutus/php/var/boolval');
+var TwigError = require('./model/Error');
+var log = require('./helper/log');
 
 module.exports = function (Twig) {
     "use strict";
@@ -103,7 +105,7 @@ module.exports = function (Twig) {
                 break;
 
             default:
-                throw new Twig.Error("Failed to lookup operator: " + operator + " is an unknown operator.");
+                throw new TwigError("Failed to lookup operator: " + operator + " is an unknown operator.");
         }
         token.operator = operator;
         return token;
@@ -115,7 +117,7 @@ module.exports = function (Twig) {
      * Returns the updated stack.
      */
     Twig.expression.operator.parse = function (operator, stack) {
-        Twig.log.trace("Twig.expression.operator.parse: ", "Handling ", operator);
+        log.trace("Twig.expression.operator.parse: ", "Handling ", operator);
         var a, b, c;
 
         if (operator === '?') {
@@ -268,7 +270,7 @@ module.exports = function (Twig) {
 
             default:
                 debugger;
-                throw new Twig.Error("Failed to parse operator: " + operator + " is an unknown operator.");
+                throw new TwigError("Failed to parse operator: " + operator + " is an unknown operator.");
         }
     };
 

@@ -1,6 +1,7 @@
 // ## twig.filters.js
 //
 // This file handles parsing filters.
+
 module.exports = function (Twig) {
 
     Twig.filters = {
@@ -37,9 +38,7 @@ module.exports = function (Twig) {
         first: require('./filter/first'),
         split: require('./filter/split'),
         last: require('./filter/last'),
-        raw: function(value) {
-            return Twig.Markup(value);
-        },
+        raw: require('./helper/markup'),
         batch: require('./filter/batch'),
         round: require('./filter/round')
     };

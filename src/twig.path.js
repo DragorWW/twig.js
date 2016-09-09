@@ -1,6 +1,8 @@
 // ## twig.path.js
 //
 // This file handles path parsing
+var TwigError = require('./model/Error');
+
 module.exports = function (Twig) {
     "use strict";
 
@@ -82,7 +84,7 @@ module.exports = function (Twig) {
             // Custom registered loader
             base = template.base || template.name || template.id;
         } else {
-            throw new Twig.Error("Cannot extend an inline template.");
+            throw new TwigError("Cannot extend an inline template.");
         }
 
         base_path = base.split(sep_chr);

@@ -1,4 +1,5 @@
 var forEach = require('../helper/forEach');
+var TwigError = require('../model/Error');
 
 module.exports = function (value, params) {
     var obj = [],
@@ -68,7 +69,7 @@ module.exports = function (value, params) {
         }
     });
     if (params.length === 0) {
-        throw new Twig.Error("Filter merge expects at least one parameter");
+        throw new TwigError("Filter merge expects at least one parameter");
     }
 
     return obj;

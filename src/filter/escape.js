@@ -1,4 +1,7 @@
 var sprintf = require('locutus/php/strings/sprintf');
+var TwigError = require('../model/Error');
+var markup = require('../helper/markup');
+var url_encode = require('./url_encode');
 
 module.exports = function (value, params) {
     if (value === undefined || value === null) {
@@ -15,7 +18,7 @@ module.exports = function (value, params) {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
-        return Twig.Markup(raw_value, 'html');
+        return markup(raw_value, 'html');
     } else if (strategy == "js") {
         var raw_value = value.toString();
         var result = "";
@@ -33,7 +36,7 @@ module.exports = function (value, params) {
             }
         }
 
-        return Twig.Markup(result, 'js');
+        return markup(result, 'js');
     } else if (strategy == "css") {
         var raw_value = value.toString();
         var result = "";
@@ -47,10 +50,10 @@ module.exports = function (value, params) {
             }
         }
 
-        return Twig.Markup(result, 'css');
+        return markup(result, 'css');
     } else if (strategy == "url") {
-        var result = Twig.filters.url_encode(value);
-        return Twig.Markup(result, 'url');
+        var result = url_encode(value);
+        return markup(result, 'url');
     } else if (strategy == "html_attr") {
         var raw_value = value.toString();
         var result = "";
@@ -77,8 +80,8 @@ module.exports = function (value, params) {
             }
         }
 
-        return Twig.Markup(result, 'html_attr');
+        return markup(result, 'html_attr');
     } else {
-        throw new Twig.Error("escape strategy unsupported");
+        throw new TwigError("escape strategy unsupported");
     }
 };

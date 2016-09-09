@@ -1,6 +1,9 @@
 // ## twig.compiler.js
 //
 // This file handles compiling templates into JS
+var TwigError = require('./model/Error');
+
+
 module.exports = function (Twig) {
     /**
      * Namespace for compilation.
@@ -18,7 +21,7 @@ module.exports = function (Twig) {
 
         if (options.module) {
             if (Twig.compiler.module[options.module] === undefined) {
-                throw new Twig.Error("Unable to find module type " + options.module);
+                throw new TwigError("Unable to find module type " + options.module);
             }
             output = Twig.compiler.module[options.module](id, tokens, options.twig);
         } else {

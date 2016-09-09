@@ -1,11 +1,12 @@
 var is = require('../helper/is');
+var TwigError = require('../model/Error');
 
 module.exports = function (value, params) {
     if (value === undefined || value === null) {
         return;
     }
     if (params === undefined || params.length < 1 || params.length > 2) {
-        throw new Twig.Error("split filter expects 1 or 2 argument");
+        throw new TwigError("split filter expects 1 or 2 argument");
     }
     if (is("String", value)) {
         var delimiter = params[ 0 ],
@@ -55,6 +56,6 @@ module.exports = function (value, params) {
         }
 
     } else {
-        throw new Twig.Error("split filter expects value to be a string");
+        throw new TwigError("split filter expects value to be a string");
     }
 }

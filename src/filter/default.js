@@ -1,6 +1,8 @@
+var TwigError = require('../model/Error');
+
 module.exports = function (value, params) {
     if (params !== undefined && params.length > 1) {
-        throw new Twig.Error("default filter expects one argument");
+        throw new TwigError("default filter expects one argument");
     }
     if (value === undefined || value === null || value === '') {
         if (params === undefined) {

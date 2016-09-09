@@ -9,6 +9,10 @@ var is = require('./helper/is');
 var copy = require('./helper/copy');
 var extend = require('./helper/extend');
 var boolval = require('locutus/php/var/boolval');
+var constants = require('./constants');
+var TwigError = require('./model/Error');
+var log = require('./helper/log');
+var markup = require('./helper/markup');
 
 module.exports = function (Twig) {
     "use strict";
@@ -218,7 +222,7 @@ module.exports = function (Twig) {
                         token.key_var = kv_split[0].trim();
                         token.value_var = kv_split[1].trim();
                     } else {
-                        throw new Twig.Error("Invalid expression in for loop: " + key_value);
+                        throw new TwigError("Invalid expression in for loop: " + key_value);
                     }
                 } else {
                     token.value_var = key_value;
@@ -500,7 +504,7 @@ module.exports = function (Twig) {
                 var block_output,
                     output,
                     isImported = indexOf(this.importedBlocks, token.block) > -1,
-                    hasParent = this.blocks[token.block] && indexOf(this.blocks[token.block], Twig.placeholders.parent) > -1;
+                    hasParent = this.blocks[token.block] && indexOf(this.blocks[token.block], constants.placeholders.parent) > -1;
 
                 // Don't override previous blocks unless they're imported with "use"
                 // Loops should be exempted as well.
@@ -524,7 +528,7 @@ module.exports = function (Twig) {
                     }
 
                     if (hasParent) {
-                        this.blocks[token.block] = Twig.Markup(this.blocks[token.block].replace(Twig.placeholders.parent, block_output));
+                        this.blocks[token.block] = markup(this.blocks[token.block].replace(constants.placeholders.parent, block_output));
                     } else {
                         this.blocks[token.block] = block_output;
                     }
@@ -793,7 +797,7 @@ module.exports = function (Twig) {
                 for (var i=0; i<parameters.length; i++) {
                     for (var j=0; j<parameters.length; j++){
                         if (parameters[i] === parameters[j] && i !== j) {
-                            throw new Twig.Error("Duplicate arguments for parameter: "+ parameters[i]);
+                            throw new TwigError("Duplicate arguments for parameter: "+ parameters[i]);
                         }
                     }
                 }
@@ -1085,7 +1089,7 @@ module.exports = function (Twig) {
     Twig.logic.extend = function (definition) {
 
         if (!definition.type) {
-            throw new Twig.Error("Unable to extend logic definition. No type provided for " + definition);
+            throw new TwigError("Unable to extend logic definition. No type provided for " + definition);
         } else {
             Twig.logic.extendType(definition.type);
         }
@@ -1112,7 +1116,7 @@ module.exports = function (Twig) {
         // Check if the token needs compiling
         if (token_template.compile) {
             token = token_template.compile.apply(this, [token]);
-            Twig.log.trace("Twig.logic.compile: ", "Compiled logic token to ", token);
+            log.trace("Twig.logic.compile: ", "Compiled logic token to ", token);
         }
 
         return token;
@@ -1160,7 +1164,7 @@ module.exports = function (Twig) {
                     if (match !== null) {
                         token.type  = token_type;
                         token.match = match;
-                        Twig.log.trace("Twig.logic.tokenize: ", "Matched a ", token_type, " regular expression of ", match);
+                        log.trace("Twig.logic.tokenize: ", "Matched a ", token_type, " regular expression of ", match);
                         return token;
                     }
                 }
@@ -1168,7 +1172,7 @@ module.exports = function (Twig) {
         }
 
         // No regex matches
-        throw new Twig.Error("Unable to parse '" + expression.trim() + "'");
+        throw new TwigError("Unable to parse '" + expression.trim() + "'");
     };
 
     /**
@@ -1197,7 +1201,7 @@ module.exports = function (Twig) {
 
         context = context || { };
 
-        Twig.log.debug("Twig.logic.parse: ", "Parsing logic token ", token);
+        log.debug("Twig.logic.parse: ", "Parsing logic token ", token);
 
         token_template = Twig.logic.handler[token.type];
 

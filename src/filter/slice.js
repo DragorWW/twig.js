@@ -1,11 +1,12 @@
 var is = require('../helper/is');
+var TwigError = require('../model/Error');
 
 module.exports = function (value, params) {
     if (value === undefined || value === null) {
         return;
     }
     if (params === undefined || params.length < 1) {
-        throw new Twig.Error("slice filter expects at least 1 argument");
+        throw new TwigError("slice filter expects at least 1 argument");
     }
 
     // default to start of string
@@ -24,6 +25,6 @@ module.exports = function (value, params) {
     } else if (is("String", value)) {
         return value.substr(startIndex, length);
     } else {
-        throw new Twig.Error("slice filter expects value to be an array or string");
+        throw new TwigError("slice filter expects value to be an array or string");
     }
 }

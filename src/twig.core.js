@@ -5,6 +5,9 @@
 
 var indexOf = require('./helper/indexOf');
 var forEach = require('./helper/forEach');
+var TwigError = require('./model/Error');
+var log = require('./helper/log');
+var markup = require('./helper/markup');
 
 module.exports = function (Twig) {
     "use strict";
@@ -15,38 +18,9 @@ module.exports = function (Twig) {
     // Default caching to true for the improved performance it offers
     Twig.cache = true;
 
-    Twig.placeholders = {
-        parent: "{{|PARENT|}}"
-    };
 
 
-    /**
-     * Exception thrown by twig.js.
-     */
-    Twig.Error = require('./model/Error')
 
-    /**
-     * Wrapper for logging to the console.
-     */
-    Twig.log = {
-        trace: function() {if (Twig.trace && console) {console.log(Array.prototype.slice.call(arguments));}},
-        debug: function() {if (Twig.debug && console) {console.log(Array.prototype.slice.call(arguments));}}
-    };
-
-
-    if (typeof console !== "undefined") {
-        if (typeof console.error !== "undefined") {
-            Twig.log.error = function() {
-                console.error.apply(console, arguments);
-            }
-        } else if (typeof console.log !== "undefined") {
-            Twig.log.error = function() {
-                console.log.apply(console, arguments);
-            }
-        }
-    } else {
-        Twig.log.error = function(){};
-    }
 
     /**
      * Wrapper for child context objects in Twig.
@@ -177,7 +151,7 @@ module.exports = function (Twig) {
             first_key_position = template.indexOf(token_template.open);
             close_key_position = template.indexOf(token_template.close);
 
-            Twig.log.trace("Twig.token.findStart: ", "Searching for ", token_template.open, " found at ", first_key_position);
+            log.trace("Twig.token.findStart: ", "Searching for ", token_template.open, " found at ", first_key_position);
 
             //Special handling for mismatched tokens
             if (first_key_position >= 0) {
@@ -257,7 +231,7 @@ module.exports = function (Twig) {
                 found = true;
             } else {
                 // throw an exception
-                throw new Twig.Error("Unable to find closing bracket '" + token_def.close +
+                throw new TwigError("Unable to find closing bracket '" + token_def.close +
                                 "'" + " opened near template position " + start);
             }
 
@@ -323,7 +297,7 @@ module.exports = function (Twig) {
             // Find the first occurance of any token type in the template
             found_token = Twig.token.findStart(template);
 
-            Twig.log.trace("Twig.tokenize: ", "Found token: ", found_token);
+            log.trace("Twig.tokenize: ", "Found token: ", found_token);
 
             if (found_token.position !== null) {
                 // Add a raw type token for anything before the start of the token
@@ -339,7 +313,7 @@ module.exports = function (Twig) {
                 // Find the end of the token
                 end = Twig.token.findEnd(template, found_token.def, error_offset);
 
-                Twig.log.trace("Twig.tokenize: ", "Token ends at ", end);
+                log.trace("Twig.tokenize: ", "Token ends at ", end);
 
                 tokens.push({
                     type:  found_token.def.type,
@@ -424,7 +398,7 @@ module.exports = function (Twig) {
                 open = Twig.logic.handler[type].open;
                 next = Twig.logic.handler[type].next;
 
-                Twig.log.trace("Twig.compile: ", "Compiled logic token to ", logic_token,
+                log.trace("Twig.compile: ", "Compiled logic token to ", logic_token,
                                                  " next is: ", next, " open is : ", open);
 
                 // Not a standalone token, check logic stack to see if this is expected
@@ -454,7 +428,7 @@ module.exports = function (Twig) {
 
                 // This token requires additional tokens to complete the logic structure.
                 if (next !== undefined && next.length > 0) {
-                    Twig.log.trace("Twig.compile: ", "Pushing ", logic_token, " to logic stack.");
+                    log.trace("Twig.compile: ", "Pushing ", logic_token, " to logic stack.");
 
                     if (stack.length > 0) {
                         // Put any currently held output into the output list of the logic operator
@@ -488,7 +462,7 @@ module.exports = function (Twig) {
                 prev_output = output[output.length - 1];
                 prev_intermediate_output = intermediate_output[intermediate_output.length - 1];
                 next_token = tokens[0];
-                Twig.log.trace("Compiling token ", token);
+                log.trace("Compiling token ", token);
                 switch (token.type) {
                     case Twig.token.type.raw:
                         if (stack.length > 0) {
@@ -580,7 +554,7 @@ module.exports = function (Twig) {
                         break;
                 }
 
-                Twig.log.trace("Twig.compile: ", " Output: ", output,
+                log.trace("Twig.compile: ", " Output: ", output,
                                                  " Logic Stack: ", stack,
                                                  " Pending Output: ", intermediate_output );
             }
@@ -593,11 +567,11 @@ module.exports = function (Twig) {
             }
             return output;
         } catch (ex) {
-            Twig.log.error("Error compiling twig template " + this.id + ": ");
+            log.error("Error compiling twig template " + this.id + ": ");
             if (ex.stack) {
-                Twig.log.error(ex.stack);
+                log.error(ex.stack);
             } else {
-                Twig.log.error(ex.toString());
+                log.error(ex.toString());
             }
 
             if (this.options.rethrow) throw ex;
@@ -620,7 +594,7 @@ module.exports = function (Twig) {
                 that = this;
 
             forEach(tokens, function parseToken(token) {
-                Twig.log.debug("Twig.parse: ", "Parsing token: ", token);
+                log.debug("Twig.parse: ", "Parsing token: ", token);
 
                 switch (token.type) {
                     case Twig.token.type.raw:
@@ -651,7 +625,7 @@ module.exports = function (Twig) {
                     case Twig.token.type.output_whitespace_post:
                     case Twig.token.type.output_whitespace_both:
                     case Twig.token.type.output:
-                        Twig.log.debug("Twig.parse: ", "Output token: ", token.stack);
+                        log.debug("Twig.parse: ", "Output token: ", token.stack);
                         // Parse the given expression in the given context
                         output.push(Twig.expression.parse.apply(that, [token.stack, context]));
                         break;
@@ -659,11 +633,11 @@ module.exports = function (Twig) {
             });
             return Twig.output.apply(this, [output]);
         } catch (ex) {
-            Twig.log.error("Error parsing twig template " + this.id + ": ");
+            log.error("Error parsing twig template " + this.id + ": ");
             if (ex.stack) {
-                Twig.log.error(ex.stack);
+                log.error(ex.stack);
             } else {
-                Twig.log.error(ex.toString());
+                log.error(ex.toString());
             }
 
             if (this.options.rethrow) throw ex;
@@ -685,14 +659,14 @@ module.exports = function (Twig) {
         var tokens, raw_tokens;
 
         // Tokenize
-        Twig.log.debug("Twig.prepare: ", "Tokenizing ", data);
+        log.debug("Twig.prepare: ", "Tokenizing ", data);
         raw_tokens = Twig.tokenize.apply(this, [data]);
 
         // Compile
-        Twig.log.debug("Twig.prepare: ", "Compiling ", raw_tokens);
+        log.debug("Twig.prepare: ", "Compiling ", raw_tokens);
         tokens = Twig.compile.apply(this, [raw_tokens]);
 
-        Twig.log.debug("Twig.prepare: ", "Compiled ", tokens);
+        log.debug("Twig.prepare: ", "Compiled ", tokens);
 
         return tokens;
     };
@@ -721,7 +695,7 @@ module.exports = function (Twig) {
             }
             escaped_output.push(str);
         });
-        return Twig.Markup(escaped_output.join(""));
+        return markup(escaped_output.join(""));
     }
 
     // Namespace for template storage and retrieval
@@ -750,14 +724,14 @@ module.exports = function (Twig) {
      *
      * @param {string} id The ID to check.
      *
-     * @throws {Twig.Error} If the ID is invalid or used.
+     * @throws {TwigError} If the ID is invalid or used.
      * @return {boolean} True if the ID is valid.
      */
     Twig.validateId = function(id) {
         if (id === "prototype") {
-            throw new Twig.Error(id + " is not a valid twig identifier");
+            throw new TwigError(id + " is not a valid twig identifier");
         } else if (Twig.cache && Twig.Templates.registry.hasOwnProperty(id)) {
-            throw new Twig.Error("There is already a template with the ID " + id);
+            throw new TwigError("There is already a template with the ID " + id);
         }
         return true;
     }
@@ -783,13 +757,13 @@ module.exports = function (Twig) {
      * @param {Function} func The function to execute when loading the template
      * @param {Object|undefined} scope Optional scope parameter to bind func to
      *
-     * @throws Twig.Error
+     * @throws TwigError
      *
      * @return {void}
      */
     Twig.Templates.registerLoader = function(method_name, func, scope) {
         if (typeof func !== 'function') {
-            throw new Twig.Error('Unable to add loader for ' + method_name + ': Invalid function reference given.');
+            throw new TwigError('Unable to add loader for ' + method_name + ': Invalid function reference given.');
         }
         if (scope) {
             func = func.bind(scope);
@@ -841,13 +815,13 @@ module.exports = function (Twig) {
      * @param {Function} func The function to execute when parsing the template
      * @param {Object|undefined} scope Optional scope parameter to bind func to
      *
-     * @throws Twig.Error
+     * @throws TwigError
      *
      * @return {void}
      */
     Twig.Templates.registerParser = function(method_name, func, scope) {
         if (typeof func !== 'function') {
-            throw new Twig.Error('Unable to add parser for ' + method_name + ': Invalid function regerence given.');
+            throw new TwigError('Unable to add parser for ' + method_name + ': Invalid function regerence given.');
         }
 
         if (scope) {
@@ -888,7 +862,7 @@ module.exports = function (Twig) {
      */
     Twig.Templates.save = function(template) {
         if (template.id === undefined) {
-            throw new Twig.Error("Unable to save template with no id");
+            throw new TwigError("Unable to save template with no id");
         }
         Twig.Templates.registry[template.id] = template;
     };
@@ -964,244 +938,6 @@ module.exports = function (Twig) {
         return obj !== undefined && obj !== null && clas === type;
     }
 
-    /**
-     * Create a new twig.js template.
-     *
-     * Parameters: {
-     *      data:   The template, either pre-compiled tokens or a string template
-     *      id:     The name of this template
-     *      blocks: Any pre-existing block from a child template
-     * }
-     *
-     * @param {Object} params The template parameters.
-     */
-    Twig.Template = function ( params ) {
-        var data = params.data,
-            id = params.id,
-            blocks = params.blocks,
-            macros = params.macros || {},
-            base = params.base,
-            path = params.path,
-            url = params.url,
-            name = params.name,
-            method = params.method,
-            // parser options
-            options = params.options;
-
-        // # What is stored in a Twig.Template
-        //
-        // The Twig Template hold several chucks of data.
-        //
-        //     {
-        //          id:     The token ID (if any)
-        //          tokens: The list of tokens that makes up this template.
-        //          blocks: The list of block this template contains.
-        //          base:   The base template (if any)
-        //            options:  {
-        //                Compiler/parser options
-        //
-        //                strict_variables: true/false
-        //                    Should missing variable/keys emit an error message. If false, they default to null.
-        //            }
-        //     }
-        //
-
-        this.id     = id;
-        this.method = method;
-        this.base   = base;
-        this.path   = path;
-        this.url    = url;
-        this.name   = name;
-        this.macros = macros;
-        this.options = options;
-
-        this.reset(blocks);
-
-        if (is('String', data)) {
-            this.tokens = Twig.prepare.apply(this, [data]);
-        } else {
-            this.tokens = data;
-        }
-
-        if (id !== undefined) {
-            Twig.Templates.save(this);
-        }
-    };
-
-    Twig.Template.prototype.reset = function(blocks) {
-        Twig.log.debug("Twig.Template.reset", "Reseting template " + this.id);
-        this.blocks = {};
-        this.importedBlocks = [];
-        this.originalBlockTokens = {};
-        this.child = {
-            blocks: blocks || {}
-        };
-        this.extend = null;
-    };
-
-    Twig.Template.prototype.render = function (context, params) {
-        params = params || {};
-
-        var output,
-            url;
-
-        this.context = context || {};
-
-        // Clear any previous state
-        this.reset();
-        if (params.blocks) {
-            this.blocks = params.blocks;
-        }
-        if (params.macros) {
-            this.macros = params.macros;
-        }
-
-        output = Twig.parse.apply(this, [this.tokens, this.context]);
-
-        // Does this template extend another
-        if (this.extend) {
-            var ext_template;
-
-            // check if the template is provided inline
-            if ( this.options.allowInlineIncludes ) {
-                ext_template = Twig.Templates.load(this.extend);
-                if ( ext_template ) {
-                    ext_template.options = this.options;
-                }
-            }
-
-            // check for the template file via include
-            if (!ext_template) {
-                url = Twig.path.parsePath(this, this.extend);
-
-                ext_template = Twig.Templates.loadRemote(url, {
-                    method: this.getLoaderMethod(),
-                    base: this.base,
-                    async:  false,
-                    id:     url,
-                    options: this.options
-                });
-            }
-
-            this.parent = ext_template;
-
-            return this.parent.render(this.context, {
-                blocks: this.blocks
-            });
-        }
-
-        if (params.output == 'blocks') {
-            return this.blocks;
-        } else if (params.output == 'macros') {
-            return this.macros;
-        } else {
-            return output;
-        }
-    };
-
-    Twig.Template.prototype.importFile = function(file) {
-        var url, sub_template;
-        if (!this.url && this.options.allowInlineIncludes) {
-            file = this.path ? this.path + '/' + file : file;
-            sub_template = Twig.Templates.load(file);
-
-            if (!sub_template) {
-                sub_template = Twig.Templates.loadRemote(url, {
-                    id: file,
-                    method: this.getLoaderMethod(),
-                    async: false,
-                    options: this.options
-                });
-
-                if (!sub_template) {
-                    throw new Twig.Error("Unable to find the template " + file);
-                }
-            }
-
-            sub_template.options = this.options;
-
-            return sub_template;
-        }
-
-        url = Twig.path.parsePath(this, file);
-
-        // Load blocks from an external file
-        sub_template = Twig.Templates.loadRemote(url, {
-            method: this.getLoaderMethod(),
-            base: this.base,
-            async: false,
-            options: this.options,
-            id: url
-        });
-
-        return sub_template;
-    };
-
-    Twig.Template.prototype.importBlocks = function(file, override) {
-        var sub_template = this.importFile(file),
-            context = this.context,
-            that = this;
-
-        override = override || false;
-
-        sub_template.render(context);
-
-        // Mixin blocks
-        forEach(Object.keys(sub_template.blocks), function(key) {
-            if (override || that.blocks[key] === undefined) {
-                that.blocks[key] = sub_template.blocks[key];
-                that.importedBlocks.push(key);
-            }
-        });
-    };
-
-    Twig.Template.prototype.importMacros = function(file) {
-        var url = Twig.path.parsePath(this, file);
-
-        // load remote template
-        var remoteTemplate = Twig.Templates.loadRemote(url, {
-            method: this.getLoaderMethod(),
-            async: false,
-            id: url
-        });
-
-        return remoteTemplate;
-    };
-
-    Twig.Template.prototype.getLoaderMethod = function() {
-        if (this.path) {
-            return 'fs';
-        }
-        if (this.url) {
-            return 'ajax';
-        }
-        return this.method || 'fs';
-    };
-
-    Twig.Template.prototype.compile = function(options) {
-        // compile the template into raw JS
-        return Twig.compiler.compile(this, options);
-    };
-
-    /**
-     * Create safe output
-     *
-     * @param {string} Content safe to output
-     *
-     * @return {String} Content wrapped into a String
-     */
-
-    Twig.Markup = function(content, strategy) {
-        if(typeof strategy == 'undefined') {
-            strategy = true;
-        }
-
-        if (typeof content === 'string' && content.length > 0) {
-            content = new String(content);
-            content.twig_markup = strategy;
-        }
-        return content;
-    };
 
     return Twig;
 

@@ -15,7 +15,7 @@
 - `Twig.lib.strtotime` -> `require('locutus/php/datetime/strtotime')`
 - `Twig.lib.date` -> `require('locutus/php/datetime/date')`
 - `Twig.lib.boolval` -> `require('locutus/php/var/boolval')`
-
+- `Twig.Template` -> `require('./model/Template')`
 # Remove
 - `Twig.lib`
 

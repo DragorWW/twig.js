@@ -1,12 +1,13 @@
 var is = require('../helper/is');
 var strtotime = require('locutus/php/datetime/strtotime');
+var TwigError = require('../model/Error');
 
 module.exports = function (value, params) {
     if (value === undefined || value === null) {
         return;
     }
     if (params === undefined || params.length !== 1) {
-        throw new Twig.Error("date_modify filter expects 1 argument");
+        throw new TwigError("date_modify filter expects 1 argument");
     }
 
     var modifyText = params[ 0 ], time;

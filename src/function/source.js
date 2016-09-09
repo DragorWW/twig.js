@@ -1,3 +1,6 @@
+var TwigError = require('../model/Error');
+var log = require('../helper/log');
+
 /**
  * @constant
  * @type {string}
@@ -59,7 +62,7 @@ module.exports = function (name, ignore_missing) {
             templateFound = true;
         }
     } catch (e) {
-        Twig.log.debug('Twig.functions.source: ', 'Problem loading template  ', e);
+        log.debug('Twig.functions.source: ', 'Problem loading template  ', e);
     }
 
     //if the template was NOT found AND we are not ignoring missing templates, return the same message

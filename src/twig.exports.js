@@ -1,6 +1,8 @@
 // ## twig.exports.js
 //
 // This file provides extension points and other hooks into the twig functionality.
+var TwigError = require('./model/Error');
+var Template = require('./model/Template');
 
 module.exports = function (Twig) {
     "use strict";
@@ -49,13 +51,13 @@ module.exports = function (Twig) {
 
         } else if (params.ref !== undefined) {
             if (params.id !== undefined) {
-                throw new Twig.Error("Both ref and id cannot be set on a twig.js template.");
+                throw new TwigError("Both ref and id cannot be set on a twig.js template.");
             }
             return Twig.Templates.load(params.ref);
         
         } else if (params.method !== undefined) {
             if (!Twig.Templates.isRegisteredLoader(params.method)) {
-                throw new Twig.Error('Loader for "' + params.method + '" is not defined.');
+                throw new TwigError('Loader for "' + params.method + '" is not defined.');
             }
             return Twig.Templates.loadRemote(params.name || params.href || params.path || id || undefined, {
                 id: id,
@@ -138,7 +140,7 @@ module.exports = function (Twig) {
             template;
 
         // Try to load the template from the cache
-        template = new Twig.Template({
+        template = new Template({
             data: markup,
             path: path,
             id: id,
@@ -157,7 +159,7 @@ module.exports = function (Twig) {
      * @param {Object|Function} The options or callback.
      * @param {Function} fn callback.
      * 
-     * @throws Twig.Error
+     * @throws TwigError
      */
     Twig.exports.renderFile = function(path, options, fn) {
         // handle callback in options

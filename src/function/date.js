@@ -1,5 +1,6 @@
 var is = require('../helper/is');
 var strtotime = require('locutus/php/datetime/strtotime');
+var TwigError = require('../model/Error');
 
 module.exports = function (date, time) {
     var dateObj;
@@ -18,7 +19,7 @@ module.exports = function (date, time) {
         // timestamp
         dateObj = new Date(date * 1000);
     } else {
-        throw new Twig.Error("Unable to parse date " + date);
+        throw new TwigError("Unable to parse date " + date);
     }
     return dateObj;
 }

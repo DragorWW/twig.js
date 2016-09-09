@@ -1,3 +1,4 @@
+var TwigError = require('../model/Error');
 var is = require('../helper/is');
 var chunkArray = require('../helper/chunkArray');
 
@@ -9,11 +10,11 @@ module.exports = function (items, params) {
         missing;
 
     if (!is("Array", items)) {
-        throw new Twig.Error("batch filter expects items to be an array");
+        throw new TwigError("batch filter expects items to be an array");
     }
 
     if (!is("Number", size)) {
-        throw new Twig.Error("batch filter expects size to be a number");
+        throw new TwigError("batch filter expects size to be a number");
     }
 
     size = Math.ceil(size);

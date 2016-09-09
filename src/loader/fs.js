@@ -1,4 +1,5 @@
 var fs, path;
+var TwigError = require('../model/Error');
 
 try {
     // require lib dependencies at runtime
@@ -15,7 +16,7 @@ module.exports = function (location, params, callback, error_callback) {
         parser = this.parsers[ params.parser ] || this.parser.twig;
 
     if (!fs || !path) {
-        throw new Twig.Error('Unsupported platform: Unable to load from file ' +
+        throw new TwigError('Unsupported platform: Unable to load from file ' +
             'because there is no "fs" or "path" implementation');
     }
 
@@ -46,7 +47,7 @@ module.exports = function (location, params, callback, error_callback) {
     if (params.async) {
         fs.stat(params.path, function (err, stats) {
             if (err || !stats.isFile()) {
-                throw new Twig.Error('Unable to find template file ' + location);
+                throw new TwigError('Unable to find template file ' + location);
             }
             fs.readFile(params.path, 'utf8', loadTemplateFn);
         });
@@ -54,7 +55,7 @@ module.exports = function (location, params, callback, error_callback) {
         return true;
     } else {
         if (!fs.statSync(params.path).isFile()) {
-            throw new Twig.Error('Unable to find template file ' + location);
+            throw new TwigError('Unable to find template file ' + location);
         }
         data = fs.readFileSync(params.path, 'utf8');
         loadTemplateFn(undefined, data);
