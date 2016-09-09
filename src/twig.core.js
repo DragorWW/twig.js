@@ -648,28 +648,6 @@ module.exports = function (Twig) {
         }
     };
 
-    /**
-     * Tokenize and compile a string template.
-     *
-     * @param {string} data The template.
-     *
-     * @return {Array} The compiled tokens.
-     */
-    Twig.prepare = function(data) {
-        var tokens, raw_tokens;
-
-        // Tokenize
-        log.debug("Twig.prepare: ", "Tokenizing ", data);
-        raw_tokens = Twig.tokenize.apply(this, [data]);
-
-        // Compile
-        log.debug("Twig.prepare: ", "Compiling ", raw_tokens);
-        tokens = Twig.compile.apply(this, [raw_tokens]);
-
-        log.debug("Twig.prepare: ", "Compiled ", tokens);
-
-        return tokens;
-    };
 
     /**
      * Join the output token's stack and escape it if needed

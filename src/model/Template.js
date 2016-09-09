@@ -2,6 +2,7 @@ var forEach = require('../helper/forEach');
 var TwigError = require('../model/Error');
 var log = require('../helper/log');
 var is = require('../helper/is');
+var prepare = require('../helper/prepare');
 
 module.exports = Template;
 
@@ -59,7 +60,7 @@ function Template ( params ) {
     this.reset(blocks);
 
     if (is('String', data)) {
-        this.tokens = Twig.prepare.apply(this, [data]);
+        this.tokens = prepare.apply(this, [data]);
     } else {
         this.tokens = data;
     }
