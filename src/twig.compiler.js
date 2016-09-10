@@ -3,7 +3,6 @@
 // This file handles compiling templates into JS
 var TwigError = require('./model/Error');
 
-
 module.exports = function (Twig) {
     /**
      * Namespace for compilation.
@@ -13,17 +12,17 @@ module.exports = function (Twig) {
     };
 
     // Compile a Twig Template to output.
-    Twig.compiler.compile = function(template, options) {
+    Twig.compiler.compile = function (template, options) {
         // Get tokens
         var tokens = JSON.stringify(template.tokens)
             , id = template.id
             , output;
 
         if (options.module) {
-            if (Twig.compiler.module[options.module] === undefined) {
+            if (Twig.compiler.module[ options.module ] === undefined) {
                 throw new TwigError("Unable to find module type " + options.module);
             }
-            output = Twig.compiler.module[options.module](id, tokens, options.twig);
+            output = Twig.compiler.module[ options.module ](id, tokens, options.twig);
         } else {
             output = Twig.compiler.wrap(id, tokens);
         }
@@ -31,23 +30,23 @@ module.exports = function (Twig) {
     };
 
     Twig.compiler.module = {
-        amd: function(id, tokens, pathToTwig) {
+        amd: function (id, tokens, pathToTwig) {
             return 'define(["' + pathToTwig + '"], function (Twig) {\n\tvar twig, templates;\ntwig = Twig.twig;\ntemplates = ' + Twig.compiler.wrap(id, tokens) + '\n\treturn templates;\n});';
         }
-        , node: function(id, tokens) {
+        , node: function (id, tokens) {
             return 'var twig = require("twig").twig;\n'
                 + 'exports.template = ' + Twig.compiler.wrap(id, tokens)
         }
-        , cjs2: function(id, tokens, pathToTwig) {
+        , cjs2: function (id, tokens, pathToTwig) {
             return 'module.declare([{ twig: "' + pathToTwig + '" }], function (require, exports, module) {\n'
-                        + '\tvar twig = require("twig").twig;\n'
-                        + '\texports.template = ' + Twig.compiler.wrap(id, tokens)
-                    + '\n});'
+                + '\tvar twig = require("twig").twig;\n'
+                + '\texports.template = ' + Twig.compiler.wrap(id, tokens)
+                + '\n});'
         }
     };
 
-    Twig.compiler.wrap = function(id, tokens) {
-        return 'twig({id:"'+id.replace('"', '\\"')+'", data:'+tokens+', precompiled: true});\n';
+    Twig.compiler.wrap = function (id, tokens) {
+        return 'twig({id:"' + id.replace('"', '\\"') + '", data:' + tokens + ', precompiled: true});\n';
     };
 
     return Twig;

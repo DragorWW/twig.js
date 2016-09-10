@@ -1,7 +1,8 @@
+var Templates = require('./model/Templates.js');
 module.exports = function(Twig) {
     'use strict';
 
-    Twig.Templates.registerParser('source', function(params) {
+    Templates.registerParser('source', function(params) {
         return params.data || '';
     });
 };

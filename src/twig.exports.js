@@ -3,6 +3,7 @@
 // This file provides extension points and other hooks into the twig functionality.
 var TwigError = require('./model/Error');
 var Template = require('./model/Template');
+var Templates = require('./model/Templates.js');
 
 module.exports = function (Twig) {
     "use strict";
@@ -41,7 +42,7 @@ module.exports = function (Twig) {
         }
 
         if (params.data !== undefined) {
-            return Twig.Templates.parsers.twig({
+            return Templates.parsers.twig({
                 data: params.data,
                 path: params.hasOwnProperty('path') ? params.path : undefined,
                 module: params.module,
@@ -53,13 +54,13 @@ module.exports = function (Twig) {
             if (params.id !== undefined) {
                 throw new TwigError("Both ref and id cannot be set on a twig.js template.");
             }
-            return Twig.Templates.load(params.ref);
+            return Templates.load(params.ref);
         
         } else if (params.method !== undefined) {
-            if (!Twig.Templates.isRegisteredLoader(params.method)) {
+            if (!Templates.isRegisteredLoader(params.method)) {
                 throw new TwigError('Loader for "' + params.method + '" is not defined.');
             }
-            return Twig.Templates.loadRemote(params.name || params.href || params.path || id || undefined, {
+            return Templates.loadRemote(params.name || params.href || params.path || id || undefined, {
                 id: id,
                 method: params.method,
                 parser: params.parser || 'twig',
@@ -72,7 +73,7 @@ module.exports = function (Twig) {
             }, params.load, params.error);
 
         } else if (params.href !== undefined) {
-            return Twig.Templates.loadRemote(params.href, {
+            return Templates.loadRemote(params.href, {
                 id: id,
                 method: 'ajax',
                 parser: params.parser || 'twig',
@@ -85,7 +86,7 @@ module.exports = function (Twig) {
             }, params.load, params.error);
 
         } else if (params.path !== undefined) {
-            return Twig.Templates.loadRemote(params.path, {
+            return Templates.loadRemote(params.path, {
                 id: id,
                 method: 'fs',
                 parser: params.parser || 'twig',
@@ -145,7 +146,7 @@ module.exports = function (Twig) {
             path: path,
             id: id,
             options: options.settings['twig options']
-        }); // Twig.Templates.load(id) ||
+        }); // Templates.load(id) ||
 
         return function(context) {
             return template.render(context);

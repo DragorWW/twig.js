@@ -13,6 +13,7 @@ var constants = require('./constants');
 var TwigError = require('./model/Error');
 var log = require('./helper/log');
 var markup = require('./helper/markup');
+var ChildContext = require('./model/ChildContext');
 
 module.exports = function (Twig) {
     "use strict";
@@ -273,7 +274,7 @@ module.exports = function (Twig) {
                     },
                     // run once for each iteration of the loop
                     loop = function(key, value) {
-                        var inner_context = Twig.ChildContext(context);
+                        var inner_context = ChildContext(context);
 
                         inner_context[token.value_var] = value;
 
@@ -614,7 +615,7 @@ module.exports = function (Twig) {
             },
             parse: function (token, context, chain) {
                 var template,
-                    innerContext = Twig.ChildContext(context);
+                    innerContext = ChildContext(context);
                 // Resolve filename
                 var file = Twig.expression.parse.apply(this, [token.stack, context]);
 
@@ -718,7 +719,7 @@ module.exports = function (Twig) {
                     template;
 
                 if (!token.only) {
-                    innerContext = Twig.ChildContext(context);
+                    innerContext = ChildContext(context);
                 }
 
                 if (token.withStack !== undefined) {

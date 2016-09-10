@@ -1,4 +1,6 @@
 var log = require('./log');
+var tokenize = require('../helper/tokenize');
+var compile = require('../twig.compile');
 
 /**
  * Tokenize and compile a string template.
@@ -12,11 +14,11 @@ module.exports = function(data) {
 
     // Tokenize
     log.debug("Twig.prepare: ", "Tokenizing ", data);
-    raw_tokens = Twig.tokenize.apply(this, [data]);
+    raw_tokens = tokenize.apply(this, [data]);
 
     // Compile
     log.debug("Twig.prepare: ", "Compiling ", raw_tokens);
-    tokens = Twig.compile.apply(this, [raw_tokens]);
+    tokens = compile.apply(this, [raw_tokens]);
 
     log.debug("Twig.prepare: ", "Compiled ", tokens);
 

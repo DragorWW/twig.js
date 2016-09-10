@@ -1,5 +1,6 @@
 var TwigError = require('../model/Error');
 var log = require('../helper/log');
+var Templates = require('../model/Templates.js');
 
 /**
  * @constant
@@ -50,7 +51,7 @@ module.exports = function (name, ignore_missing) {
     //
     //on exception, log it
     try {
-        templateSource = Twig.Templates.loadRemote(name, params);
+        templateSource = Templates.loadRemote(name, params);
 
         //if the template is undefined or null, set the template to an empty string and do NOT flip the
         // boolean indicating we found the template

@@ -3,6 +3,7 @@ var TwigError = require('../model/Error');
 var log = require('../helper/log');
 var is = require('../helper/is');
 var prepare = require('../helper/prepare');
+var Templates = require('./Templates.js');
 
 module.exports = Template;
 
@@ -66,7 +67,7 @@ function Template ( params ) {
     }
 
     if (id !== undefined) {
-        Twig.Templates.save(this);
+        Templates.save(this);
     }
 };
 
@@ -106,7 +107,7 @@ Template.prototype.render = function (context, params) {
 
         // check if the template is provided inline
         if ( this.options.allowInlineIncludes ) {
-            ext_template = Twig.Templates.load(this.extend);
+            ext_template = Templates.load(this.extend);
             if ( ext_template ) {
                 ext_template.options = this.options;
             }
@@ -116,7 +117,7 @@ Template.prototype.render = function (context, params) {
         if (!ext_template) {
             url = Twig.path.parsePath(this, this.extend);
 
-            ext_template = Twig.Templates.loadRemote(url, {
+            ext_template = Templates.loadRemote(url, {
                 method: this.getLoaderMethod(),
                 base: this.base,
                 async:  false,
@@ -145,10 +146,10 @@ Template.prototype.importFile = function(file) {
     var url, sub_template;
     if (!this.url && this.options.allowInlineIncludes) {
         file = this.path ? this.path + '/' + file : file;
-        sub_template = Twig.Templates.load(file);
+        sub_template = Templates.load(file);
 
         if (!sub_template) {
-            sub_template = Twig.Templates.loadRemote(url, {
+            sub_template = Templates.loadRemote(url, {
                 id: file,
                 method: this.getLoaderMethod(),
                 async: false,
@@ -168,7 +169,7 @@ Template.prototype.importFile = function(file) {
     url = Twig.path.parsePath(this, file);
 
     // Load blocks from an external file
-    sub_template = Twig.Templates.loadRemote(url, {
+    sub_template = Templates.loadRemote(url, {
         method: this.getLoaderMethod(),
         base: this.base,
         async: false,
@@ -201,7 +202,7 @@ Template.prototype.importMacros = function(file) {
     var url = Twig.path.parsePath(this, file);
 
     // load remote template
-    var remoteTemplate = Twig.Templates.loadRemote(url, {
+    var remoteTemplate = Templates.loadRemote(url, {
         method: this.getLoaderMethod(),
         async: false,
         id: url
